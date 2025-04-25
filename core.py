@@ -1,6 +1,9 @@
 import asyncio
 from typing import Deque
-from system.interfaces.menu_template import Menu
+
+from system.apps.settings import Settings
+from system.interface.list_menu import ListMenu, Button
+from system.interface.menu_template import Menu
 from system.input import InputHandler
 from collections import deque
 
@@ -19,11 +22,13 @@ class System:
         self.current_context = None                 # Функция, что возвращает меню
         self.menu_stack = deque()                   # Стек с меню
 
-    def build_menu(self):
-        system_menu = Menu(
-
+    def build_system_menu(self):
+        system_menu = ListMenu(
+            "Main menu",
+            Button("Apps", hop_context=None),
+            Button("Setting", hop_context=Settings().menu_init())
         )
-
+    
     async def process_action(self):
         while True:
             action = self.input_handler.get_action()

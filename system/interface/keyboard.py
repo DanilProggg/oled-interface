@@ -1,6 +1,6 @@
 from typing import override
 
-from system.interfaces.menu_template import Menu
+from system.interface.menu_template import Menu
 
 class Keyboard(Menu):
     def __init__(self):

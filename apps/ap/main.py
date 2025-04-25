@@ -1,5 +1,5 @@
 from system.app_template import AppTemplate
-from system.interfaces.list_menu import ListMenu, ListMenuItem, Button
+from system.interface.list_menu import ListMenu, ListMenuItem, Button
 
 
 class AccessPoint(AppTemplate):
