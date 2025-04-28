@@ -1,7 +1,8 @@
 from typing import override
 
 from system.app_template import AppTemplate
-from system.interface.list_menu import ListMenu, Button
+from system.interface.ListMenu.Button import Button
+from system.interface.ListMenu.ListMenu import ListMenu
 
 
 class Settings(AppTemplate):
