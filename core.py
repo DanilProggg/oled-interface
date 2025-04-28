@@ -1,8 +1,11 @@
 import asyncio
 from typing import Deque
 
-from system.apps.settings import Settings
-from system.interface.list_menu import ListMenu, Button
+from system.app_template import AppTemplate
+from system.apps.Settings import Settings
+from system.interface.ListMenu.Button import Button
+from system.interface.ListMenu.ListMenu import ListMenu
+
 from system.interface.menu_template import Menu
 from system.input import InputHandler
 from collections import deque
@@ -14,7 +17,7 @@ from collections import deque
 - загружаться все модули
 """
 
-class System:
+class Core:
     def __init__(self):
         self.display = None                         # Дисплей
         self.input_handler = InputHandler()         # Обработчик нажатий
@@ -23,11 +26,18 @@ class System:
         self.menu_stack = deque()                   # Стек с меню
 
     def build_system_menu(self):
-        system_menu = ListMenu(
-            "Main menu",
-            Button("Apps", hop_context=None),
-            Button("Setting", hop_context=Settings().menu_init())
-        )
+        buttons = []
+
+        app_classes = [Settings]  # Тут можно динамически загружать из папки
+
+        # Создаем кнопки для каждого приложения
+        for app_class in app_classes:
+            app_instance = app_class()  # Создаем экземпляр приложения
+            menu = app_instance.menu_init()  # Получаем меню
+            buttons.append(Button(menu.title, hop_context=menu))
+
+        system_menu = ListMenu("Main Menu", *buttons)
+        return system_menu
     
     async def process_action(self):
         while True:
