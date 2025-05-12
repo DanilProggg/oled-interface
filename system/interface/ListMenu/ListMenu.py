@@ -1,6 +1,9 @@
 from typing import override
+import ctypes
 
 from system.interface.menu_template import Menu
+
+
 
 
 class ListMenu(Menu):
@@ -8,7 +11,7 @@ class ListMenu(Menu):
         self.index = 0
         self.title = title
         self.items = items
-        self._display_buffer = []
+        self.offset = 0
 
     @override
     def draw(self):
@@ -16,11 +19,19 @@ class ListMenu(Menu):
 
     @override
     def move(self, direction):
-        if direction == "left":
+        if direction == "LEFT":
             self.items[self.index].handle_left()  # Свайп влево для переключателя
-        elif direction == "right":
+        elif direction == "RIGHT":
             self.items[self.index].handle_right()  # Свайп вправо
-        elif direction == "up":
-            self.index = max(0, self.index - 1)
-        elif direction == "down":
-            self.index = min(len(self.items) - 1, self.index + 1)
+        elif direction == "UP":
+            pass
+        elif direction == "DOWN":
+            pass
+
+    @override
+    def ok(self, set_context):
+        self.items[self.index].handle_ok(set_context)
+
+    @override
+    def back(self):
+        pass

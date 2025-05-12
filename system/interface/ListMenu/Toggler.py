@@ -20,14 +20,11 @@ class Toggler(ListMenuItem):
         with open(self.json_path, "r") as file:
             data = json.load(file)
 
-            for i in data["options"]:
+            for i in data["arguments"]:
                 if i == self.json_param:
                     return i["options"]
         return None
 
-
-    def get_item_text(self) -> str:
-        pass
 
     def handle_ok(self): pass
 

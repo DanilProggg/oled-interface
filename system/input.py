@@ -14,8 +14,10 @@ class InputHandler:
                 return {
                     pygame.K_UP: "UP",
                     pygame.K_DOWN: "DOWN",
-                    pygame.K_RETURN: "SELECT",
-                    pygame.K_ESCAPE: "BACK"
+                    pygame.K_RETURN: "LEFT",
+                    pygame.K_ESCAPE: "RIGHT",
+                    pygame.K_ENTER: "OK",
+                    pygame.BACKSPACE: "BACK"
                 }.get(event.key)
         return None
 

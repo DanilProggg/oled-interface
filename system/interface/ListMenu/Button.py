@@ -9,8 +9,8 @@ class Button(ListMenuItem):
     def get_item_text(self) -> str:
         return self.label
 
-    def handle_ok(self):
-        return self.hop_context
+    def handle_ok(self, set_context):
+        set_context(hop_context)
 
     def handle_left(self):
         pass
