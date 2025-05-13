@@ -8,6 +8,7 @@ from system.interface.ListMenu.ListMenu import ListMenu
 
 from system.interface.menu_template import Menu
 from system.input import InputHandler
+from system.display import DisplayManager
 from collections import deque
 
 """
@@ -19,7 +20,7 @@ from collections import deque
 
 class Core:
     def __init__(self):
-        self.display = None                         # Дисплей
+        self.display = DisplayManager()             # Дисплей
         self.input_handler = InputHandler()         # Обработчик нажатий
         self.app_loader = None                      # Загрузчик модулей
         self.current_context = build_system_menu()  # Функция, что возвращает меню
@@ -44,10 +45,12 @@ class Core:
     
 
     # СМЕНА КОНТЕКСТА
-    def set_context(self, hop_context):
+    def forward_context(self, hop_context):
         self.menu_stack.append(self.current_context)
         self.current_context = hop_context
 
+    def backward_context(self):
+        self.current_context = self.menu_stack.pop()
     #
     #   ОБРАБОТКА НАЖАТИЙ  временно pygame
     #
@@ -57,7 +60,7 @@ class Core:
             if action == "OK:
                 current_context.ok(set_context)
             elif action == "BACK":
-                current_context.back()
+                current_context.back(backward_context)
             elif action == "LEFT":
                 current_context.move("LEFT")
             elif action == "RIGHT":
@@ -71,7 +74,7 @@ class Core:
 
     async def draw_display(self):
         while True:
-            self.current_context.draw()
+            display.draw(self.current_context)
             await asyncio.sleep(0.2)
 
     async def run(self):

@@ -3,7 +3,7 @@ from abc import abstractmethod, ABC
 class Menu(ABC):
 
     @abstractmethod
-    def draw(self):
+    def get_draw_data(self):
         """Отрисовка для каждого меню реализуеться отдельно"""
         pass
 
@@ -12,11 +12,11 @@ class Menu(ABC):
         pass
 
     @abstractmethod
-    def back(self):
+    def back(self, backward_context):
         pass
 
     @abstractmethod
-    def ok(self, set_context):
+    def ok(self, forward_context):
         pass
 
 

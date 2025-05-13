@@ -1,8 +1,5 @@
 from typing import override
-import ctypes
-
 from system.interface.menu_template import Menu
-
 
 
 
@@ -11,10 +8,11 @@ class ListMenu(Menu):
         self.index = 0
         self.title = title
         self.items = items
+        self.drawing_items = [] # В меню может быть видно одновременно лишь 10 элементов
         self.offset = 0
 
     @override
-    def draw(self):
+    def get_draw_data(self):
         pass
 
     @override
@@ -34,4 +32,4 @@ class ListMenu(Menu):
 
     @override
     def back(self):
-        pass
+        self.items[self.index].handle_back(backward_context)
