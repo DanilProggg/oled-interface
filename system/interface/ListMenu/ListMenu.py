@@ -19,7 +19,7 @@ class ListMenu(Menu):
         return {
             "type": "list",
             "title": self.title,
-            "items": [item.label for item in visible_items],
+            "items": visible_items,
             "selected": self.index - self.offset
         }
 

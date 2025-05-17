@@ -15,7 +15,7 @@ class ListMenuItem(ABC):
     def __init__(self, label):
         self.label = label
     @abstractmethod
-    def get_item_text(self) -> str:
+    def get_item_text(self):
         pass
 
 
