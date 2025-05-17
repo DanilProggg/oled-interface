@@ -1,25 +1,32 @@
-import pygame
+import logging
+import keyboard
+
+input_logger = logging.getLogger("debug")
 
 class InputHandler:
     def __init__(self):
         # инициализация GPIO
-        pass
+        input_logger.debug("Инициализация ввода")
+        
 
     def get_action(self):
-        return self._get_keyboard_action()
+        key = self._get_keyboard_action()
+        input_logger.debug(f"Нажата клавиша: {key}")
+        return key
 
     def _get_keyboard_action(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                return {
-                    pygame.K_UP: "UP",
-                    pygame.K_DOWN: "DOWN",
-                    pygame.K_RETURN: "LEFT",
-                    pygame.K_ESCAPE: "RIGHT",
-                    pygame.K_ENTER: "OK",
-                    pygame.BACKSPACE: "BACK"
-                }.get(event.key)
-        return None
+        if keyboard.is_pressed('up'):
+            return "UP"
+        elif keyboard.is_pressed('down'):
+            return "DOWN"
+        elif keyboard.is_pressed('left'):
+            return "LEFT"
+        elif keyboard.is_pressed('right'):
+            return "RIGHT"
+        elif keyboard.is_pressed('enter'):
+            return "OK"
+        elif keyboard.is_pressed('esc'):
+            return "BACK"
 
 
 

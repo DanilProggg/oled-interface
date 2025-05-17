@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "default": {
+      "format": "%(asctime)s %(levelname)s: %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    },
+    "verbose": {
+      "format": "%(asctime)s %(levelname)s:  %(module)s %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    },
+    "simple": {
+      "format": "%(levelname)s %(message)s"
+    }
+  },
+  "handlers": {
+    "console": {
+      "level": "DEBUG",
+      "class": "logging.StreamHandler",
+      "formatter": "simple"
+    },
+    "file": {
+      "level": "DEBUG",
+      "class": "logging.FileHandler",
+      "filename": "app.log",
+      "formatter": "verbose"
+    }
+  },
+  "loggers": {
+    "display": {
+      "handlers": ["console", "file"],
+      "level": "ERROR",
+      "propagate": false
+    },
+    "input": {
+      "handlers": ["console", "file"],
+      "level": "ERROR",
+      "propagate": false
+    },
+    "core": {
+      "handlers": ["console", "file"],
+      "level": "INFO",
+      "propagate": false
+    },
+    "debug": {
+      "handlers": ["console", "file"],
+      "level": "DEBUG",
+      "propagate": false
+    }
+  }
+}

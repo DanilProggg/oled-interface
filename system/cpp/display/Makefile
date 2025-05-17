@@ -1,7 +1,7 @@
 CC = g++
-CFLAGS = -Wall -O2 -I./src -fPIC -g
-LDFLAGS = -shared
+CFLAGS = -Wall -O2 -I./src -fPIC -g 
 LIBS = -lbcm2835
+LDFLAGS = -shared
 
 SRC = \
     src/st7735.cpp \

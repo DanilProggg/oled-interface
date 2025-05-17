@@ -1,35 +1,46 @@
-from typing import override
 from system.interface.menu_template import Menu
 
 
 
 class ListMenu(Menu):
     def __init__(self, title: str, items):
+        super().__init__(title)
         self.index = 0
-        self.title = title
         self.items = items
-        self.drawing_items = [] # В меню может быть видно одновременно лишь 10 элементов
+        self.max_visible = 10
         self.offset = 0
 
-    @override
-    def get_draw_data(self):
-        pass
+    #Получение видимых элементов
+    def get_visible_items(self):
+        return self.items[self.offset:self.offset + self.max_visible]
 
-    @override
+    def get_draw_data(self):
+        visible_items = self.get_visible_items()
+        return {
+            "type": "list",
+            "title": self.title,
+            "items": [item.label for item in visible_items],
+            "selected": self.index - self.offset
+        }
+
     def move(self, direction):
         if direction == "LEFT":
             self.items[self.index].handle_left()  # Свайп влево для переключателя
         elif direction == "RIGHT":
             self.items[self.index].handle_right()  # Свайп вправо
         elif direction == "UP":
-            pass
+            if self.index > 0:
+                self.index -= 1
+                if self.index < self.offset:
+                    self.offset -= 1
         elif direction == "DOWN":
-            pass
+            if self.index < len(self.items) - 1:
+                self.index += 1
+                if self.index >= self.offset + self.max_visible:
+                    self.offset += 1
 
-    @override
     def ok(self, set_context):
         self.items[self.index].handle_ok(set_context)
 
-    @override
     def back(self):
         self.items[self.index].handle_back(backward_context)

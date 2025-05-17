@@ -45,8 +45,6 @@ void st7735_set_rotation(uint8_t rotation) {
 
 void st7735_init() {
     // Сброс
-    bcm2835_gpio_write(RST_PIN, HIGH);
-    bcm2835_delay(100);
     bcm2835_gpio_write(RST_PIN, LOW);
     bcm2835_delay(100);
     bcm2835_gpio_write(RST_PIN, HIGH);
