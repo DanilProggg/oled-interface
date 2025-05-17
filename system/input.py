@@ -7,26 +7,25 @@ class InputHandler:
     def __init__(self):
         # инициализация GPIO
         input_logger.debug("Инициализация ввода")
-        
 
     def get_action(self):
-        key = self._get_keyboard_action()
-        input_logger.debug(f"Нажата клавиша: {key}")
-        return key
+        return curses.wrapper(self._curses_loop)
 
-    def _get_keyboard_action(self):
-        if keyboard.is_pressed('up'):
+    def _curses_loop(self, stdscr):
+        stdscr.nodelay(False)
+        stdscr.keypad(True)
+        
+        key = stdscr.getch()
+        if key == curses.KEY_UP:
             return "UP"
-        elif keyboard.is_pressed('down'):
+        elif key == curses.KEY_DOWN:
             return "DOWN"
-        elif keyboard.is_pressed('left'):
+        elif key == curses.KEY_LEFT:
             return "LEFT"
-        elif keyboard.is_pressed('right'):
+        elif key == curses.KEY_RIGHT:
             return "RIGHT"
-        elif keyboard.is_pressed('enter'):
+        elif key in (10, 13):  # Enter
             return "OK"
-        elif keyboard.is_pressed('esc'):
+        elif key == 27:  # Esc
             return "BACK"
-
-
 
