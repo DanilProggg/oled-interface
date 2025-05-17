@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <cstring>
 
+//Буффер для отрисовки кадра
+uint16_t framebuffer[TFT_WIDTH * TFT_HEIGHT];
 
 void st7735_write_command(uint8_t cmd) {
     bcm2835_gpio_write(DC_PIN, LOW);
@@ -87,12 +89,56 @@ void st7735_init() {
     }
 }
 
-void st7735_draw_pixel(uint8_t x, uint8_t y, uint16_t color) {
-    if(x >= TFT_WIDTH || y >= TFT_HEIGHT) return;
+
+void buffer_draw_pixel(uint8_t x, uint8_t y, uint16_t color) {
+    if (x >= TFT_WIDTH || y >= TFT_HEIGHT) return;
+    framebuffer[y * TFT_WIDTH + x] = color;
+}
+
+void buffer_clear(uint16_t color) {
+    for (int i = 0; i < TFT_WIDTH * TFT_HEIGHT; ++i) {
+        framebuffer[i] = color;
+    }
+}
+
+void buffer_flush_to_display() {
+    st7735_set_address_window(0, 0, TFT_WIDTH - 1, TFT_HEIGHT - 1);
+    for (int i = 0; i < TFT_WIDTH * TFT_HEIGHT; ++i) {
+        uint16_t color = framebuffer[i];
+        st7735_write_data(color >> 8);
+        st7735_write_data(color & 0xFF);
+    }
+}
+
+
+
+void st7735_draw_char(uint8_t x, uint8_t y, char c, uint16_t color, uint16_t bg) {
+    if(c < 32 || c > 127) return;
+
+    const uint8_t *chr = &font[(c - 32) * 5];
     
-    st7735_set_address_window(x, y, x, y);
-    st7735_write_data(color >> 8);
-    st7735_write_data(color & 0xFF);
+    for(uint8_t i = 0; i < 5; i++) {
+        uint8_t line = chr[i];
+        for(uint8_t j = 0; j < 8; j++) {
+            if(line & 0x1) {
+                buffer_draw_pixel(x + i, y + j, color);
+            } else {
+                buffer_draw_pixel(x + i, y + j, bg);
+            }
+            line >>= 1;
+        }
+    }
+}
+
+void st7735_draw_string(uint8_t x, uint8_t y, const char *str, uint16_t color, uint16_t bg) {
+    while(*str) {
+        st7735_draw_char(x, y, *str++, color, bg);
+        x += 6;
+        if(x + 5 >= TFT_WIDTH) {
+            x = 0;
+            y += 9;
+        }
+    }
 }
 
 void st7735_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint16_t color) {
@@ -109,36 +155,7 @@ void st7735_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint1
     // Отрисовка каждого пикселя прямоугольника
     for (uint16_t i = x; i < end_x; i++) {
         for (uint16_t j = y; j < end_y; j++) {
-            st7735_draw_pixel((uint8_t)i, (uint8_t)j, color);
-        }
-    }
-}
-
-void st7735_draw_char(uint8_t x, uint8_t y, char c, uint16_t color, uint16_t bg) {
-    if(c < 32 || c > 127) return;
-
-    const uint8_t *chr = &font[(c - 32) * 5];
-    
-    for(uint8_t i = 0; i < 5; i++) {
-        uint8_t line = chr[i];
-        for(uint8_t j = 0; j < 8; j++) {
-            if(line & 0x1) {
-                st7735_draw_pixel(x + i, y + j, color);
-            } else {
-                st7735_draw_pixel(x + i, y + j, bg);
-            }
-            line >>= 1;
-        }
-    }
-}
-
-void st7735_draw_string(uint8_t x, uint8_t y, const char *str, uint16_t color, uint16_t bg) {
-    while(*str) {
-        st7735_draw_char(x, y, *str++, color, bg);
-        x += 6;
-        if(x + 5 >= TFT_WIDTH) {
-            x = 0;
-            y += 9;
+            buffer_draw_pixel((uint8_t)i, (uint8_t)j, color);
         }
     }
 }

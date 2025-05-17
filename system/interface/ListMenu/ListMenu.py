@@ -1,6 +1,7 @@
 from system.interface.menu_template import Menu
+import logging
 
-
+logger = logging.getLogger("debug")
 
 class ListMenu(Menu):
     def __init__(self, title: str, items):
@@ -26,21 +27,25 @@ class ListMenu(Menu):
     def move(self, direction):
         if direction == "LEFT":
             self.items[self.index].handle_left()  # Свайп влево для переключателя
+            logger.debug("Обработано нажатие LEFT")
         elif direction == "RIGHT":
             self.items[self.index].handle_right()  # Свайп вправо
+            logger.debug("Обработано нажатие RIGHT")
         elif direction == "UP":
             if self.index > 0:
                 self.index -= 1
                 if self.index < self.offset:
                     self.offset -= 1
+            logger.debug("Обработано нажатие UP")
         elif direction == "DOWN":
             if self.index < len(self.items) - 1:
                 self.index += 1
                 if self.index >= self.offset + self.max_visible:
                     self.offset += 1
+            logger.debug("Обработано нажатие DOWN")
 
-    def ok(self, set_context):
-        self.items[self.index].handle_ok(set_context)
+    def ok(self, forward_context):
+        self.items[self.index].handle_ok(forward_context)
 
-    def back(self):
+    def back(self, backward_context):
         self.items[self.index].handle_back(backward_context)

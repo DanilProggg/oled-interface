@@ -59,6 +59,7 @@ void draw_list_menu_item(uint8_t y, const char *str, uint16_t color, uint16_t bg
 
 
 void draw_list_menu(const MenuItem *items, int itemsCount, const char *menu_label) {
+    buffer_clear(COLOR_BLACK);
     set_window_label(menu_label, COLOR_GREEN, COLOR_BLACK);
 
     if (itemsCount > 10) {
@@ -70,6 +71,7 @@ void draw_list_menu(const MenuItem *items, int itemsCount, const char *menu_labe
         draw_list_menu_item(y, items[i].label, COLOR_ORANGE, COLOR_BLACK, items[i].selected, items[i].value);
         y+=10;
     }
+    buffer_flush_to_display();
 }
 
 

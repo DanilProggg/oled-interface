@@ -70,9 +70,9 @@ class Core:
         while True:
             action = self.input_handler.get_action()
             if action == "OK":
-                self.current_context.ok(set_context)
+                self.current_context.ok(self.forward_context)
             elif action == "BACK":
-                self.current_context.back(backward_context)
+                self.current_context.back(self.backward_context)
             elif action == "LEFT":
                 self.current_context.move("LEFT")
             elif action == "RIGHT":

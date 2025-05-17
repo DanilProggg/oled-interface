@@ -33,7 +33,9 @@ extern "C" {
 
 // Прототипы функций
 void st7735_init();
-void st7735_draw_pixel(uint8_t x, uint8_t y, uint16_t color);
+void buffer_draw_pixel(uint8_t x, uint8_t y, uint16_t color);
+void buffer_clear(uint16_t color);
+void buffer_flush_to_display();
 void st7735_draw_char(uint8_t x, uint8_t y, char c, uint16_t color, uint16_t bg);
 void st7735_draw_string(uint8_t x, uint8_t y, const char *str, uint16_t color, uint16_t bg);
 void set_window_label(const char *label, uint16_t color, uint16_t bg);

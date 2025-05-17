@@ -10,10 +10,12 @@ class Button(ListMenuItem):
         return self.label
 
     def handle_ok(self, forward_context):
-        forward_context(hop_context)
+        forward_context(self.hop_context)
+        input_logger.debug("Обработано нажатие OK")
 
     def handle_back(self, backward_context):
         backward_context()
+        input_logger.debug("Обработано нажатие BACK")
 
     def handle_left(self):
         pass
