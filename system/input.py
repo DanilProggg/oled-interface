@@ -1,5 +1,5 @@
 import logging
-import keyboard
+import curses
 
 input_logger = logging.getLogger("debug")
 
