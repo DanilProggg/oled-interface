@@ -12,24 +12,12 @@ class InputHandler:
         return curses.wrapper(self._curses_loop)
 
     def _curses_loop(self, stdscr):
-        stdscr.nodelay(True)   # Включаем неблокирующий ввод
+        stdscr.nodelay(False)
         stdscr.keypad(True)
 
+        curses.flushinp()
+        
         key = stdscr.getch()
-        if key == -1:
-            return None
-
-        if key == 27:
-            curses.napms(10)  # Дать шанс другим байтам появиться
-            next_key = stdscr.getch()
-            if next_key == -1:
-                input_logger.debug("Нажата кнопка BACK (ESC)")
-                return "BACK"
-            else:
-                # Это escape-последовательность (например, стрелка)
-                stdscr.getch()  # съесть ещё один символ, если есть
-                return None  # Не возвращаем BACK
-
         if key == curses.KEY_UP:
             input_logger.debug("Нажата кнопка UP")
             return "UP"
@@ -45,6 +33,7 @@ class InputHandler:
         elif key in (10, 13):  # Enter
             input_logger.debug("Нажата кнопка OK")
             return "OK"
-        
-        return None
+        elif key == 27:  # Esc
+            input_logger.debug("Нажата кнопка BACK")
+            return "BACK"
 
