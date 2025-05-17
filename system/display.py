@@ -44,10 +44,14 @@ class DisplayManager:
         c_items = []
         index = 0
         for item in data["items"]:
-            c_item = CListMenuItem(item.label.encode(), index == data["selected"], item.value)
+            label = item.label.encode()
+            selected = index == data["selected"]
+            value = item.value if hasattr(item, 'current_option') else None
+            c_item = CListMenuItem(label, selected, value)
+            c_items.append(c_item)
             index += 1
 
         c_items_array = (CListMenuItem * len(c_items))(*c_items)
 
-        self.lib.draw_list_menu(c_items_array, len(c_item), data["title"].encode())
+        self.lib.draw_list_menu(c_items_array, len(c_items), data["title"].encode())
     
