@@ -2,7 +2,7 @@ import asyncio
 from typing import Deque
 
 from system.app_template import AppTemplate
-from system.apps.Settings import Settings
+from system.apps.settings.main import Settings
 from system.interface.ListMenu.Button import Button
 from system.interface.ListMenu.ListMenu import ListMenu
 
@@ -56,11 +56,13 @@ class Core:
 
     # СМЕНА КОНТЕКСТА
     def forward_context(self, hop_context):
+        logger.info(f"Попытка сменить конеткст на {hop_context}")
         self.menu_stack.append(self.current_context)
         self.current_context = hop_context
         logger.info(f"Конекст сменен на {self.current_context.title}")
 
     def backward_context(self):
+        logger.info(f"Попытка вернуться на предыдущий контекст")
         self.current_context = self.menu_stack.pop()
         logger.info(f"Конекст сменен на {self.current_context.title}")
     #

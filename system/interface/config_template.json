@@ -1,9 +1,9 @@
 {
   "app": "app_name",
   "script_path": "/path to script/",
-  "options": [
+  "arguments": [
     {
-      "title": "option 1",
+      "title": "argument 1",
       "current_option": "value 1",
       "options": [
         "value 1",
