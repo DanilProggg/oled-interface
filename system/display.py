@@ -16,13 +16,17 @@ class DisplayManager:
         self.lib.initialize_display()
         display_logger.debug("Дисплей инициализирован")
         #
-        #   Инициализация функция с++
+        #   Инициализация функций с++
         #
         self.lib.draw_list_menu.argtypes = (ctypes.POINTER(CListMenuItem), ctypes.c_int, ctypes.c_char_p)
         self.lib.draw_list_menu.restype = None
 
+        self.lib.draw_keyboard.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_char_p)
+        self.lib.draw_keyboard.restype = None
+
         self.render_map = {
             "list": self._draw_list_menu,
+            "keyboard": self._draw_keyboard
         }
 
     
@@ -54,4 +58,7 @@ class DisplayManager:
         c_items_array = (CListMenuItem * len(c_items))(*c_items)
 
         self.lib.draw_list_menu(c_items_array, len(c_items), data["title"].encode())
+    
+    def _draw_keyboard(self, data):
+
     
