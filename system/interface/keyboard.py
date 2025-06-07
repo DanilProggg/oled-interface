@@ -1,4 +1,7 @@
 from system.interface.menu_template import Menu
+import logging
+
+logger = logging.getLogger("debug")
 
 class Keyboard(Menu):
     def __init__(self):
@@ -8,9 +11,9 @@ class Keyboard(Menu):
         self.input_buffer = ""
         self.keyboard_grid = [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '<'],  # Кнопка Backspace
-            ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', 'OK']   # Кнопка подтверждения
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '<'],  # Кнопка Backspace
+            ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', 'OK']   # Кнопка подтверждения
         ]
         self._ensure_valid_cursor_position()
 
@@ -35,27 +38,6 @@ class Keyboard(Menu):
             
             if self.cursor_row == original_row and self.cursor_col == original_col:
                 return
-
-    def move(self, direction):
-        original_row = self.cursor_row
-        original_col = self.cursor_col
-        
-        new_row, new_col = self._get_new_position(direction)
-        current_row, current_col = new_row, new_col
-        
-        while True:
-            if 0 <= current_row < 4 and 0 <= current_col < 10:
-                key_label = self.keyboard_grid[current_row][current_col]
-                if key_label.strip() != '':
-                    self.cursor_row = current_row
-                    self.cursor_col = current_col
-                    return
-            
-            current_row, current_col = self._get_next_position(direction, current_row, current_col)
-            
-            if current_row == original_row and current_col == original_col:
-                return
-
     def _get_new_position(self, direction):
         new_row = self.cursor_row
         new_col = self.cursor_col
@@ -109,39 +91,34 @@ class Keyboard(Menu):
                 current_row = 3
         return current_row, current_col
 
-    def get_draw_data(self):
-        draw_data = {
-            'type': 'keyboard',
-            'input_buffer': self.input_buffer,
-            'cursor_row': self.cursor_row,
-            'cursor_col': self.cursor_col
-        }
+    def move(self, direction):
+        original_row = self.cursor_row
+        original_col = self.cursor_col
         
-        for row in range(4):
-            for col in range(10):
-                key_label = self.keyboard_grid[row][col]
-                if not key_label.strip():
-                    continue
-                x = col * 16
-                y = 22 + row * 18
-                selected = (row == self.cursor_row and col == self.cursor_col)
-                draw_data['keys'].append({
-                    'x': x,
-                    'y': y,
-                    'label': key_label,
-                    'selected': selected
-                })
-        return draw_data
+        new_row, new_col = self._get_new_position(direction)
+        current_row, current_col = new_row, new_col
+        
+        while True:
+            if 0 <= current_row < 4 and 0 <= current_col < 10:
+                key_label = self.keyboard_grid[current_row][current_col]
+                if key_label.strip() != '':
+                    self.cursor_row = current_row
+                    self.cursor_col = current_col
+                    return
+            
+            current_row, current_col = self._get_next_position(direction, current_row, current_col)
+            
+            if current_row == original_row and current_col == original_col:
+                return
 
     def back(self, backward_context):
-        self.input_buffer = self.input_buffer[:-1]
+        backward_context()
 
     def ok(self, forward_context):
         current_key = self.keyboard_grid[self.cursor_row][self.cursor_col]
         
         if current_key == 'OK':
             # Возвращаем введенный текст через контекст
-            forward_context['input'] = self.input_buffer
             self.back(forward_context)  # Инициируем возврат в предыдущее меню
         elif current_key == '<':
             # Удаляем последний символ
@@ -150,3 +127,13 @@ class Keyboard(Menu):
             # Добавляем символ в буфер
             if current_key.strip() != '':
                 self.input_buffer += current_key
+
+    def get_draw_data(self):
+        draw_data = {
+            'type': 'keyboard',
+            'input_buffer': self.input_buffer,
+            'cursor_row': self.cursor_row,
+            'cursor_col': self.cursor_col,
+            'keys': [s.encode('utf-8') for row in self.keyboard_grid for s in row]
+        }
+        return draw_data

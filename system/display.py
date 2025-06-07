@@ -21,7 +21,7 @@ class DisplayManager:
         self.lib.draw_list_menu.argtypes = (ctypes.POINTER(CListMenuItem), ctypes.c_int, ctypes.c_char_p)
         self.lib.draw_list_menu.restype = None
 
-        self.lib.draw_keyboard.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_char_p)
+        self.lib.draw_keyboard.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
         self.lib.draw_keyboard.restype = None
 
         self.render_map = {
@@ -60,5 +60,7 @@ class DisplayManager:
         self.lib.draw_list_menu(c_items_array, len(c_items), data["title"].encode())
     
     def _draw_keyboard(self, data):
-
+        CharPP = ctypes.c_char_p * 40
+        grid_array = CharPP(*data['keys'])
+        self.lib.draw_keyboard(data['cursor_row'], data['cursor_col'], data['input_buffer'].encode(), grid_array)
     

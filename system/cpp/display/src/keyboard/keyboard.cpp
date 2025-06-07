@@ -1,10 +1,11 @@
 #include "keyboard.h"
+#include <cstring>
 
 void draw_key(uint8_t x, uint8_t y, const char* label, bool selected) {
     uint16_t key_color = selected ? COLOR_BLACK : COLOR_WHITE;
     uint16_t bg_color  = selected ? COLOR_GREEN : COLOR_BLUE;
 
-    st7735_fill_rect(x, y, 16, 16, bg_color);
+    st7735_draw_rect(x, y, 16, 16, bg_color);
 
     // Центрируем текст
     uint8_t len = strlen(label);
@@ -18,7 +19,7 @@ void draw_key(uint8_t x, uint8_t y, const char* label, bool selected) {
 }
 
 
-void draw_keyboard(uint8_t cursor_row, uint8_t cursor_col, const char* input_buffer) {
+void draw_keyboard(uint8_t cursor_row, uint8_t cursor_col, const char* input_buffer, const char** grid) {
     buffer_clear(COLOR_BLACK);
 
     // Поле ввода
@@ -26,7 +27,7 @@ void draw_keyboard(uint8_t cursor_row, uint8_t cursor_col, const char* input_buf
 
     for (uint8_t row = 0; row < 4; ++row) {
         for (uint8_t col = 0; col < 10; ++col) {
-            const char* key_label = keyboard_grid[row][col];
+            const char* key_label = grid[row * 10 + col];
             if (strlen(key_label) == 0) continue;
 
             uint8_t x = col * 16;

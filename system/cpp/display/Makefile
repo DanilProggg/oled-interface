@@ -7,7 +7,8 @@ SRC = \
     src/st7735.cpp \
     src/font.cpp \
     src/display_init.cpp \
-    src/list_menu/list_menu.cpp
+    src/list_menu/list_menu.cpp \
+    src/keyboard/keyboard.cpp
 
 LIB_NAME = libst7735.so
 
