@@ -55,16 +55,19 @@ class Core:
     
 
     # СМЕНА КОНТЕКСТА
-    def forward_context(self, hop_context):
-        logger.info(f"Попытка сменить конеткст на {hop_context}")
-        self.menu_stack.append(self.current_context)
-        self.current_context = hop_context
-        logger.info(f"Конекст сменен на {self.current_context.title}")
-
-    def backward_context(self):
-        logger.info(f"Попытка вернуться на предыдущий контекст")
-        self.current_context = self.menu_stack.pop()
-        logger.info(f"Конекст сменен на {self.current_context.title}")
+    def switch_context(self, new_context=None):
+        if new_context is not None:
+            logger.info(f"Попытка сменить контекст на {new_context}")
+            self.menu_stack.append(self.current_context)
+            self.current_context = new_context
+            logger.info(f"Контекст сменён на {self.current_context.title}")
+        else:
+            logger.info("Попытка вернуться на предыдущий контекст")
+            if self.menu_stack:
+                self.current_context = self.menu_stack.pop()
+                logger.info(f"Контекст сменён на {self.current_context.title}")
+            else:
+                logger.warning("Меню-стек пуст. Возврат невозможен.")
     #
     #   ОБРАБОТКА НАЖАТИЙ  временно pygame
     #
@@ -72,9 +75,9 @@ class Core:
         while True:
             action = self.input_handler.get_action()
             if action == "OK":
-                self.current_context.ok(self.forward_context)
+                self.current_context.ok(self.switch_context)
             elif action == "BACK":
-                self.current_context.back(self.backward_context)
+                self.current_context.back(self.switch_context)
             elif action == "LEFT":
                 self.current_context.move("LEFT")
             elif action == "RIGHT":
