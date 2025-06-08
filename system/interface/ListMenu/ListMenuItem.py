@@ -24,9 +24,6 @@ class ListMenuItem(ABC):
         """Обработка нажатия OK (для кнопок и подтверждения выбора)"""
         pass
 
-    def handle_back(self):
-        """Обработка нажатия BACK"""
-        pass
     # ==== TOGGLER ==== #
 
     def handle_left(self):

@@ -25,27 +25,28 @@ class ListMenu(Menu):
         }
 
     def move(self, direction):
-        if direction == "LEFT":
-            self.items[self.index].handle_left()  # Свайп влево для переключателя
-            logger.debug("Обработано нажатие LEFT")
-        elif direction == "RIGHT":
-            self.items[self.index].handle_right()  # Свайп вправо
-            logger.debug("Обработано нажатие RIGHT")
-        elif direction == "UP":
-            if self.index > 0:
-                self.index -= 1
-                if self.index < self.offset:
-                    self.offset -= 1
-            logger.debug("Обработано нажатие UP")
-        elif direction == "DOWN":
-            if self.index < len(self.items) - 1:
-                self.index += 1
-                if self.index >= self.offset + self.max_visible:
-                    self.offset += 1
-            logger.debug("Обработано нажатие DOWN")
+        if self.items:
+            if direction == "LEFT":
+                self.items[self.index].handle_left()  # Свайп влево для переключателя
+                logger.debug("Обработано нажатие LEFT")
+            elif direction == "RIGHT":
+                self.items[self.index].handle_right()  # Свайп вправо
+                logger.debug("Обработано нажатие RIGHT")
+            elif direction == "UP":
+                if self.index > 0:
+                    self.index -= 1
+                    if self.index < self.offset:
+                        self.offset -= 1
+                logger.debug("Обработано нажатие UP")
+            elif direction == "DOWN":
+                if self.index < len(self.items) - 1:
+                    self.index += 1
+                    if self.index >= self.offset + self.max_visible:
+                        self.offset += 1
+                logger.debug("Обработано нажатие DOWN")
 
-    def ok(self, forward_context):
-        self.items[self.index].handle_ok(forward_context)
+    def ok(self, switch_context):
+        self.items[self.index].handle_ok(switch_context)
 
-    def back(self, backward_context):
-        self.items[self.index].handle_back(backward_context)
+    def back(self, switch_context):
+        switch_context()
