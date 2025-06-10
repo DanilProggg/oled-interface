@@ -3,6 +3,7 @@ from typing import Deque
 
 from system.app_template import AppTemplate
 from system.apps.settings.main import Settings
+from system.apps.explorer.main import Explorer
 from system.interface.ListMenu.Button import Button
 from system.interface.ListMenu.ListMenu import ListMenu
 
@@ -42,7 +43,7 @@ class Core:
         logger.debug("Формирование системного меню")
         buttons = []
 
-        app_classes = [Settings]  # Тут можно динамически загружать из папки
+        app_classes = [Settings, Explorer]  # Тут можно динамически загружать из папки
 
         # Создаем кнопки для каждого приложения
         for app_class in app_classes:

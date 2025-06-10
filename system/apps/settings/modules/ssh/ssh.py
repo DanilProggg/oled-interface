@@ -7,8 +7,7 @@ class SshModule(AppTemplate):
     def __init__(self):
            super().__init__()
 
-    @staticmethod
-    def menu_init():
+    def menu_init(self):
         settings_menu = ListMenu(
             "SSH Settings",
             [

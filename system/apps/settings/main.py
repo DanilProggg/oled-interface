@@ -15,7 +15,7 @@ class Settings(AppTemplate):
         settings_menu = ListMenu(
             "Settings",
             [
-                Button(self.ssh.menu.title, hop_context=self.ssh.menu_init()),
+                Button(self.ssh.menu.title, hop_context=self.ssh.menu),
                 Button("Setting 2", hop_context=None),
                 Button("Test keyboard", hop_context=self.test_keyboard)
             ]

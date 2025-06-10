@@ -111,15 +111,15 @@ class Keyboard(Menu):
             if current_row == original_row and current_col == original_col:
                 return
 
-    def back(self, backward_context):
-        backward_context()
+    def back(self, switch_context):
+        switch_context()
 
-    def ok(self, forward_context):
+    def ok(self, switch_context):
         current_key = self.keyboard_grid[self.cursor_row][self.cursor_col]
         
         if current_key == 'OK':
             # Возвращаем введенный текст через контекст
-            self.back(forward_context)  # Инициируем возврат в предыдущее меню
+            self.switch_context()  # Инициируем возврат в предыдущее меню
         elif current_key == '<':
             # Удаляем последний символ
             self.input_buffer = self.input_buffer[:-1]
