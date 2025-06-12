@@ -15,7 +15,7 @@ class Button(ListMenuItem):
 
     def handle_ok(self, switch_context):
         switch_context(self.hop_context)
-        logger.debug("Обработано нажатие OK")
+        logger.debug("Обработано нажатие OK. Вызван callback switch_context")
 
     def handle_left(self):
         pass

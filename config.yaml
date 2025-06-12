@@ -1,2 +1,3 @@
 app:
-    storage-path: "/home/danil/minios/storage"
+    explorer:
+        storage-path: "/home/danil/minios/storage"

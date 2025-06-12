@@ -24,9 +24,13 @@ class DisplayManager:
         self.lib.draw_keyboard.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
         self.lib.draw_keyboard.restype = None
 
+        self.lib.read_file_menu.argtypes = (ctypes.c_uint8, ctypes.c_uint8, ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p)
+        self.lib.read_file_menu.restype = None
+
         self.render_map = {
             "list": self._draw_list_menu,
-            "keyboard": self._draw_keyboard
+            "keyboard": self._draw_keyboard,
+            "file_reader": self._draw_file_reader
         }
 
     
@@ -63,4 +67,20 @@ class DisplayManager:
         CharPP = ctypes.c_char_p * 40
         grid_array = CharPP(*data['keys'])
         self.lib.draw_keyboard(data['cursor_row'], data['cursor_col'], data['input_buffer'].encode(), grid_array)
+
+    def _draw_file_reader(self, data):
+        rows = len(data["lines"])
+        cols = max((len(row) for row in data["lines"]), default=0)
+
+        # Преобразуем строки в C-массив
+        CharPP = ctypes.POINTER(ctypes.c_char_p)
+        c_lines = (ctypes.c_char_p * rows)(*[s.encode() for s in data["lines"]])
+
+        self.lib.read_file_menu(
+            ctypes.c_uint8(rows),
+            ctypes.c_uint8(cols),
+            c_lines,
+            data["title"].encode()
+        )
+
     

@@ -14,11 +14,11 @@ class Menu(ABC):
         pass
 
     @abstractmethod
-    def back(self, backward_context):
+    def back(self, switch_context):
         pass
 
     @abstractmethod
-    def ok(self, forward_context):
+    def ok(self, switch_context):
         pass
 
 

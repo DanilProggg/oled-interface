@@ -1,7 +1,7 @@
 from system.app_template import AppTemplate
 from system.interface.ListMenu.Button import Button
 from system.interface.ListMenu.ListMenu import ListMenu
-from system.interface.keyboard import Keyboard
+from system.interface.Keyboard.Keyboard import Keyboard
 from system.apps.settings.modules.ssh.ssh import SshModule
 
 

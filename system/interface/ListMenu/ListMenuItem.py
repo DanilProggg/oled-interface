@@ -14,22 +14,25 @@ class CListMenuItem(ctypes.Structure):
 class ListMenuItem(ABC):
     def __init__(self, label):
         self.label = label
+
     @abstractmethod
     def get_item_text(self):
         pass
 
 
     # ==== BUTTON ==== #
+    @abstractmethod
     def handle_ok(self):
         """Обработка нажатия OK (для кнопок и подтверждения выбора)"""
         pass
 
     # ==== TOGGLER ==== #
-
+    @abstractmethod
     def handle_left(self):
         """Обработка свайпа влево (для переключателей)"""
         pass
 
+    @abstractmethod
     def handle_right(self):
         """Обработка свайпа вправо (для переключателей)"""
         pass
