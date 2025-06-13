@@ -1,7 +1,7 @@
-#include "file_reader.h"
+#include "text_output.h"
 #include <cstdint>
 
-void read_file_menu(uint8_t rows, uint8_t cols, const char** matrix, const char* title) {
+void text_output(uint8_t rows, uint8_t cols, const char** matrix, const char* title) {
     buffer_clear(BACKGROUND_COLOR);
 
     // Заголовок

@@ -2,7 +2,7 @@ import ctypes
 from system.interface.ListMenu.ListMenuItem import CListMenuItem
 import logging
 
-display_logger = logging.getLogger('debug')
+display_logger = logging.getLogger("debug")
 
 class DisplayManager:
     def __init__(self):
@@ -24,13 +24,13 @@ class DisplayManager:
         self.lib.draw_keyboard.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p))
         self.lib.draw_keyboard.restype = None
 
-        self.lib.read_file_menu.argtypes = (ctypes.c_uint8, ctypes.c_uint8, ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p)
-        self.lib.read_file_menu.restype = None
+        self.lib.text_output.argtypes = (ctypes.c_uint8, ctypes.c_uint8, ctypes.POINTER(ctypes.c_char_p), ctypes.c_char_p)
+        self.lib.text_output.restype = None
 
         self.render_map = {
             "list": self._draw_list_menu,
             "keyboard": self._draw_keyboard,
-            "file_reader": self._draw_file_reader
+            "text_output": self._draw_text_output
         }
 
     
@@ -52,9 +52,9 @@ class DisplayManager:
         c_items = []
         index = 0
         for item in data["items"]:
-            label = item.label.encode()
+            label = item.get_item_text().encode()
             selected = index == data["selected"]
-            value = item.value if hasattr(item, 'current_option') else None
+            value = item.value if hasattr(item, "current_option") else None
             c_item = CListMenuItem(label, selected, value)
             c_items.append(c_item)
             index += 1
@@ -65,10 +65,10 @@ class DisplayManager:
     
     def _draw_keyboard(self, data):
         CharPP = ctypes.c_char_p * 40
-        grid_array = CharPP(*data['keys'])
-        self.lib.draw_keyboard(data['cursor_row'], data['cursor_col'], data['input_buffer'].encode(), grid_array)
+        grid_array = CharPP(*data["keys"])
+        self.lib.draw_keyboard(data["cursor_row"], data["cursor_col"], data["input_buffer"].encode(), grid_array)
 
-    def _draw_file_reader(self, data):
+    def _draw_text_output(self, data):
         rows = len(data["lines"])
         cols = max((len(row) for row in data["lines"]), default=0)
 
@@ -76,7 +76,7 @@ class DisplayManager:
         CharPP = ctypes.POINTER(ctypes.c_char_p)
         c_lines = (ctypes.c_char_p * rows)(*[s.encode() for s in data["lines"]])
 
-        self.lib.read_file_menu(
+        self.lib.text_output(
             ctypes.c_uint8(rows),
             ctypes.c_uint8(cols),
             c_lines,

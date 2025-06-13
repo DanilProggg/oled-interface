@@ -4,21 +4,15 @@ from system.app_template import AppTemplate
 from system.interface.ListMenu.Button import Button
 from system.interface.ListMenu.ListMenu import ListMenu
 from system.interface.FileReader.FileReader import FileReader
+from system.util.Configurable import Configurable
 
 import logging
 logger = logging.getLogger('debug')
 
-class Explorer(AppTemplate):
+class Explorer(AppTemplate, Configurable):
     def __init__(self):
-        self.config = self.load_config(os.path.join(os.getcwd(), "config.yaml"))
-        super().__init__()
-
-        
-    
-    def load_config(self, path):
-            with open(path, "r", encoding="utf-8") as f:
-                config = yaml.safe_load(f)
-            return config
+        Configurable.__init__(self, os.path.join(os.getcwd(), "config.yaml"))
+        AppTemplate.__init__(self)
 
     def build_menu_from_path(self, path, title=None):
         items = []

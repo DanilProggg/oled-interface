@@ -1,31 +1,29 @@
 from system.interface.menu_template import Menu
+from system.interface.TextMenu.TextMenu import TextMenu
 import textwrap
 import logging
 import os
 
+
 logger = logging.getLogger("debug")
 
-class FileReader(Menu):
+class FileReader(Menu, TextMenu):
     def __init__(self, file_path: str):
         self.file_path = file_path
         self.filename = os.path.basename(self.file_path)
-        super().__init__(self.filename)
-        self.lines = []
-        self.offset = 0
-        self.CHARS_PER_LINE = 22
-        self.max_visible = 10
+        Menu.__init__(self, self.filename)
+        TextMenu.__init__(self)
         self._load_file()
         
-
 
     def _load_file(self):
         """Читает файл и формирует список отформатированных строк с номерами."""
         self.lines.clear()
-        with open(self.file_path, 'r', encoding='utf-8') as file:
+        with open(self.file_path, "r", encoding="utf-8") as file:
             real_line_number = 1
             for line in file:
-                line = line.rstrip('\n')
-                wrapped_lines = textwrap.wrap(line, self.CHARS_PER_LINE)
+                line = line.rstrip("\n")
+                wrapped_lines = textwrap.wrap(line, self.CHARS_IN_LINE)
                 for i, chunk in enumerate(wrapped_lines):
                     if i == 0:
                         # Нумеруем только первую строку блока, например: " 1 текст..."
@@ -35,31 +33,12 @@ class FileReader(Menu):
                         # Продолжение с отступом, чтобы не путать с новой строкой
                         self.lines.append(f"    {chunk}")
                 real_line_number += 1
-
-        # Логируем содержимое self.lines
-        total_lines = len(self.lines)
-        logger.debug(f"Loaded {total_lines} formatted lines from file:")
-        for idx, content in enumerate(self.lines):
-            logger.debug(f"[{idx}] Content: '{content}'")
-
-
-    def get_draw_data(self):
-        visible_lines = self.lines[self.offset:self.offset + self.max_visible]
-        draw_data = {
-            "type": "file_reader",
-            "lines": visible_lines,
-            "title": self.filename
-        }
-        return draw_data
     
+    def get_draw_data(self):
+        return TextMenu.get_draw_data(self)
+
     def move(self, direction):
-        if direction == "UP":
-            if self.offset > 0:
-                self.offset -= 1
-        elif direction == "DOWN":
-            if self.offset + self.max_visible < len(self.lines):
-                self.offset += 1
-        logger.debug(f"Move: {direction}, offset={self.offset}")
+        TextMenu.move(self, direction)
 
 
     def back(self, switch_context):

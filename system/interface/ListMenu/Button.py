@@ -5,9 +5,8 @@ logger = logging.getLogger("debug")
 
 
 class Button(ListMenuItem):
-    def __init__(self, label, hop_context=None, action=None):
+    def __init__(self, label, hop_context=None):
         self.hop_context = hop_context
-        self.action = action
         super().__init__(label)
 
     def get_item_text(self) -> str:

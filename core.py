@@ -4,6 +4,7 @@ from typing import Deque
 from system.app_template import AppTemplate
 from system.apps.settings.main import Settings
 from system.apps.explorer.main import Explorer
+from system.apps.apps_explorer.main import AppsExplorer
 from system.interface.ListMenu.Button import Button
 from system.interface.ListMenu.ListMenu import ListMenu
 
@@ -16,8 +17,8 @@ import logging
 from system.logger.logger_ini import setup_logging_from_json
 
 # Инициализация логирования
-setup_logging_from_json('./system/logger/logger.json')
-logger = logging.getLogger('debug')
+setup_logging_from_json("./system/logger/logger.json")
+logger = logging.getLogger("debug")
 
 """
 При запуске системы должны инициализироваться:
@@ -43,7 +44,7 @@ class Core:
         logger.debug("Формирование системного меню")
         buttons = []
 
-        app_classes = [Settings, Explorer]  # Тут можно динамически загружать из папки
+        app_classes = [AppsExplorer, Settings, Explorer]  # Тут можно динамически загружать из папки
 
         # Создаем кнопки для каждого приложения
         for app_class in app_classes:

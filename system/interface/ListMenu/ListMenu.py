@@ -17,12 +17,14 @@ class ListMenu(Menu):
 
     def get_draw_data(self):
         visible_items = self.get_visible_items()
-        return {
+        draw_data = {
             "type": "list",
             "title": self.title,
             "items": visible_items,
             "selected": self.index - self.offset
         }
+        logger.debug("Draw data: %s", draw_data)
+        return draw_data
 
     def move(self, direction):
         if self.items:
