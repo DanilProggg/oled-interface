@@ -5,18 +5,17 @@ from system.util.Configurable import Configurable
 import logging
 logger = logging.getLogger("debug")
 
-class TextMenu(Configurable):
-    def __init__(self):
+class TextMenu:
+    def __init__(self, title):
+        self.title = title
         #yaml config
-        self.config_path = os.path.join(os.getcwd(), "config.yaml")
-        Configurable.__init__(self, self.config_path)
-        
+        self.textmenu_configurable = Configurable(os.path.join(os.getcwd(), "config.yaml"))
         
         #Output params
         self.lines = []
         self.offset = 0
-        self.CHARS_IN_LINE = self.config.get_value(["app", "text-output", "chars-in-line"])
-        self.max_visible = self.config.get_value(["app", "text-output", "visible-lines"])
+        self.CHARS_IN_LINE = self.textmenu_configurable.get_value(["app", "text-output", "chars-in-line"])
+        self.max_visible = self.textmenu_configurable.get_value(["app", "text-output", "visible-lines"])
 
 
     def get_draw_data(self):
@@ -24,8 +23,9 @@ class TextMenu(Configurable):
         draw_data = {
             "type": "text_output",
             "lines": visible_lines,
-            "title": self.filename
+            "title": self.title
         }
+        logger.debug(draw_data)
         return draw_data
 
     def move(self, direction):

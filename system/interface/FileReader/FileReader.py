@@ -12,7 +12,7 @@ class FileReader(Menu, TextMenu):
         self.file_path = file_path
         self.filename = os.path.basename(self.file_path)
         Menu.__init__(self, self.filename)
-        TextMenu.__init__(self)
+        TextMenu.__init__(self, self.filename)
         self._load_file()
         
 

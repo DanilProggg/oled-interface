@@ -66,6 +66,7 @@ class Core:
         else:
             logger.info("Попытка вернуться на предыдущий контекст")
             if self.menu_stack:
+                del self.current_context
                 self.current_context = self.menu_stack.pop()
                 logger.info(f"Контекст сменён на {self.current_context.title}")
             else:
