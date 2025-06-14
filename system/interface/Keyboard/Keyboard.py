@@ -5,7 +5,8 @@ logger = logging.getLogger("debug")
 
 class Keyboard(Menu):
     def __init__(self):
-        super().__init__("Keyboard")
+        Menu.__init__(self, "Keyboard")
+
         self.cursor_row = 0
         self.cursor_col = 0
         self.input_buffer = ""
@@ -16,6 +17,14 @@ class Keyboard(Menu):
             ['z', 'x', 'c', 'v', 'b', 'n', 'm', '-', '/', 'OK']   # Кнопка подтверждения
         ]
         self._ensure_valid_cursor_position()
+
+        #Callback reservation to DynamicButton
+        self._on_change_callback = None
+
+    #Callback to DynamicButton function setup
+    def set_on_change_callback(self, callback):
+        self._on_change_callback = callback
+
 
     def _ensure_valid_cursor_position(self):
         original_row = self.cursor_row
@@ -119,7 +128,8 @@ class Keyboard(Menu):
         
         if current_key == 'OK':
             # Возвращаем введенный текст через контекст
-            self.switch_context()  # Инициируем возврат в предыдущее меню
+            self._on_change_callback(self.input_buffer)
+            switch_context()  # Инициируем возврат в предыдущее меню
         elif current_key == '<':
             # Удаляем последний символ
             self.input_buffer = self.input_buffer[:-1]

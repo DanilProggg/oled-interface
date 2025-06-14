@@ -1,23 +1,22 @@
 import yaml
 import os
+from system.util.Configurable import Configurable
 
 import logging
 logger = logging.getLogger("debug")
 
-class TextMenu:
+class TextMenu(Configurable):
     def __init__(self):
         #yaml config
-        self.config = self.load_config(os.path.join(os.getcwd(), "config.yaml"))
+        self.config_path = os.path.join(os.getcwd(), "config.yaml")
+        Configurable.__init__(self, self.config_path)
+        
         
         #Output params
         self.lines = []
         self.offset = 0
-        self.CHARS_IN_LINE = self.config["app"]["text-output"]["chars-in-line"]
-        self.max_visible = self.config["app"]["text-output"]["visible-lines"]
-
-    def load_config(self, path):
-        with open(path, "r") as file:
-            return yaml.safe_load(file)
+        self.CHARS_IN_LINE = self.config.get_value(["app", "text-output", "chars-in-line"])
+        self.max_visible = self.config.get_value(["app", "text-output", "visible-lines"])
 
 
     def get_draw_data(self):
