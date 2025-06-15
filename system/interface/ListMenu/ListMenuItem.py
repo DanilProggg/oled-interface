@@ -12,8 +12,9 @@ class CListMenuItem(ctypes.Structure):
     ]
 
 class ListMenuItem(ABC):
-    def __init__(self, label):
+    def __init__(self, label, value=None):
         self.label = label
+        self.value = value
 
     @abstractmethod
     def get_item_text(self):
