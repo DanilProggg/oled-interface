@@ -40,7 +40,7 @@
     },
     "core": {
       "handlers": ["console", "file"],
-      "level": "INFO",
+      "level": "DEBUG",
       "propagate": false
     },
     "debug": {

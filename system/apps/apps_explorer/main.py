@@ -6,7 +6,7 @@ import os, sys
 import importlib.util
 import inspect
 
-logger = logging.getLogger("debug")
+logger = logging.getLogger("display")
 
 class AppsExplorer(AppTemplate):
     def __init__(self):

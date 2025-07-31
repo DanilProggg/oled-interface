@@ -5,7 +5,7 @@ import logging
 import os
 
 
-logger = logging.getLogger("debug")
+logger = logging.getLogger("display")
 
 class FileReader(Menu, TextMenu):
     def __init__(self, file_path: str):

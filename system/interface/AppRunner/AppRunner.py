@@ -7,7 +7,7 @@ import shlex
 
 import logging
 
-logger = logging.getLogger("debug")
+logger = logging.getLogger("display")
 
 class AppRunner(Menu, TextMenu):
     def __init__(self, title, configurable: Configurable, get_command_callback):

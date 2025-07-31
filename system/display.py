@@ -1,13 +1,14 @@
 import ctypes
 from system.interface.ListMenu.ListMenuItem import CListMenuItem
 import logging
+import time
 
-display_logger = logging.getLogger("debug")
+display_logger = logging.getLogger("display")
 
 class DisplayManager:
     def __init__(self):
         display_logger.debug("Инициализация дисплея")
-        self.lib = ctypes.CDLL("./system/cpp/display/libst7735.so")
+        self.lib = ctypes.CDLL("./system/cpp/display/libst7735.so", mode=ctypes.RTLD_GLOBAL)
 
         # Определяем типы для initialize_display()
         self.lib.initialize_display.argtypes = []  
@@ -35,13 +36,15 @@ class DisplayManager:
 
     
     def draw(self, current_context):
+        start = time.time()
         display_logger.debug(f"Отрисовка контекста {current_context.title}")
         data = current_context.get_draw_data()
         draw_func = self.render_map.get(data["type"])
         try:
             if draw_func:
                 draw_func(data)
-                display_logger.debug("Кадр отрисован")
+                elapsed = time.time() - start
+                display_logger.debug(f"Кадр отрисован за {elapsed:.3f} сек")
             else:
                 raise ValueError(f"Неизвестный тип меню: {data['type']}")
         except Exception as ex:

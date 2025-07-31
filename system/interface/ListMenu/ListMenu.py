@@ -1,7 +1,7 @@
 from system.interface.menu_template import Menu
 import logging
 
-logger = logging.getLogger("debug")
+logger = logging.getLogger("display")
 
 class ListMenu(Menu):
     def __init__(self, title: str, items):

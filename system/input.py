@@ -1,39 +1,36 @@
 import logging
-import curses
+import ctypes
+from ctypes import c_uint8, c_char_p, POINTER
 
-input_logger = logging.getLogger("debug")
+input_logger = logging.getLogger("input")
+
+lib = ctypes.CDLL("./system/cpp/input/libinput.so", mode=ctypes.RTLD_GLOBAL)
+lib.initialize_buttons.restype = ctypes.c_bool
+lib.get_button_action.restype = c_char_p
+
+# Определяем типы параметров
+lib.initialize_buttons.argtypes = [POINTER(c_uint8), POINTER(c_char_p), ctypes.c_int]
 
 class InputHandler:
     def __init__(self):
-        # инициализация GPIO
-        input_logger.debug("Инициализация ввода")
+        self.pin_map = {
+            4: "UP",
+            17: "DOWN",
+            27: "LEFT",
+            22: "RIGHT",
+            5: "OK",
+            6: "BACK"
+        }
+        # pin_map: {pin_number: button_name}
+        self.pins = (c_uint8 * len(self.pin_map))(*self.pin_map.keys())
+        names = [name.encode('utf-8') for name in self.pin_map.values()]
+        self.names = (c_char_p * len(names))(*names)
+
+        success = lib.initialize_buttons(self.pins, self.names, len(self.pin_map))
+        if not success:
+            raise RuntimeError("Failed to initialize GPIO buttons")
+
 
     def get_action(self):
-        return curses.wrapper(self._curses_loop)
-
-    def _curses_loop(self, stdscr):
-        stdscr.nodelay(False)
-        stdscr.keypad(True)
-
-        curses.flushinp()
-        
-        key = stdscr.getch()
-        if key == curses.KEY_UP:
-            input_logger.debug("Нажата кнопка UP")
-            return "UP"
-        elif key == curses.KEY_DOWN:
-            input_logger.debug("Нажата кнопка DOWN")
-            return "DOWN"
-        elif key == curses.KEY_LEFT:
-            input_logger.debug("Нажата кнопка LEFT")
-            return "LEFT"
-        elif key == curses.KEY_RIGHT:
-            input_logger.debug("Нажата кнопка RIGHT")
-            return "RIGHT"
-        elif key in (10, 13):  # Enter
-            input_logger.debug("Нажата кнопка OK")
-            return "OK"
-        elif key == 27:  # Esc
-            input_logger.debug("Нажата кнопка BACK")
-            return "BACK"
-
+        action = lib.get_button_action()
+        return action.decode('utf-8') if action else None

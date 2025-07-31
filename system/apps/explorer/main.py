@@ -7,7 +7,7 @@ from system.interface.FileReader.FileReader import FileReader
 from system.util.Configurable import Configurable
 
 import logging
-logger = logging.getLogger('debug')
+logger = logging.getLogger('display')
 
 class Explorer(AppTemplate, Configurable):
     def __init__(self):

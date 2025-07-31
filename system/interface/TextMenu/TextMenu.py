@@ -3,7 +3,7 @@ import os
 from system.util.Configurable import Configurable
 
 import logging
-logger = logging.getLogger("debug")
+logger = logging.getLogger("display")
 
 class TextMenu:
     def __init__(self, title):
